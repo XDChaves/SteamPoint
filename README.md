@@ -1,0 +1,1 @@
+Análise e tratamento de dados de apps da steam.

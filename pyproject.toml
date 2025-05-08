@@ -1,17 +1,19 @@
-[project]
+[tool.poetry]
 name = "steampoint"
 version = "0.1.0"
 description = "Análise e tratamento de dados de apps da steam."
-authors = [
-    {name = "XDChaves",email = "hpchavesxdr@gmail.com"}
-]
+authors = ["XDChaves <hpchavesxdr@gmail.com>","Salazar <gsaalcantara@gmail.com>"] 
 readme = "README.md"
-requires-python = ">=3.12"
-dependencies = [
-    "pandas (>=2.2.3,<3.0.0)"
-]
+package-mode = false     
 
+[tool.poetry.dependencies]
+python = ">=3.12" 
+pandas = ">=2.2.3,<3.0.0" 
+
+[tool.poetry.group.dev.dependencies]
+jupyterlab = "^4.4.2"
+ipykernel = "^6.29.5"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core>=1.0.0"] # <<< Correção importante! (ou apenas "poetry-core")
 build-backend = "poetry.core.masonry.api"
