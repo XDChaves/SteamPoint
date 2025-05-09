@@ -1,6 +1,8 @@
-'''import csv
+'''
+# Tratar o arquivo promotional.csv / Remover as colunas de video e screenshots
 
-# Arquivo de entrada e saída
+import csv
+
 input_file = 'DataCSV/promotional.csv'
 output_file = 'newpromotional.csv'
 
@@ -18,6 +20,10 @@ with open(input_file, mode='r', encoding='utf-8') as infile, \
 
 print("Arquivo salvo como", output_file)
 '''
+
+'''
+#Tratar o arquivo games.csv / Remover as colunas de preço e language
+
 import csv
 
 input_file = 'DataCSV/games.csv'
@@ -45,3 +51,4 @@ with open(input_file, mode='r', encoding='utf-8') as infile, \
             continue
 
 print(f"Arquivo salvo como {output_file}")
+'''
