@@ -1,11 +1,10 @@
-#Extrair os dados em zip e colocar na pasta DataCSV
-
-Poetry shell
-
---poetry lock
+--Poetry shell
+--poetry add *biblioteca*
 --poetry install
 
-poetry run jumpyter lab
+--poetry lock  (atualizar dependências)
+
+--poetry run jumpyter lab
 
 
 
