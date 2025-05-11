@@ -22,33 +22,68 @@ print("Arquivo salvo como", output_file)
 '''
 
 '''
-#Tratar o arquivo games.csv / Remover as colunas de preço e language
+#Tratar o arquivo games.csv / Remover as colunas de preço
+
+import re
+
+# Caminhos dos arquivos
+entrada_csv = 'DataCSV/games.csv'
+saida_csv = 'DataCSV/games_limpo.csv'
+
+# Expressão regular para remover conteúdo dentro de chaves, mantendo as chaves
+regex_chaves = re.compile(r'\{.*?\}')
+
+with open(entrada_csv, 'r', encoding='utf-8') as entrada, \
+     open(saida_csv, 'w', encoding='utf-8') as saida:
+
+    for linha in entrada:
+        linha_limpa = regex_chaves.sub('{}', linha)  # Substitui conteúdo das chaves por {}
+        saida.write(linha_limpa)
+
+print("Pronto! Novo CSV criado com conteúdo das chaves limpo.")
+'''
+
+'''
+#Tratar o arquivo reviews.csv / Organizar a coluna de reviews
 
 import csv
 
-input_file = 'DataCSV/games.csv'
-output_file = 'newgames.csv'
+def corrigir_csv_v2(input_file, output_file):
+    """
+    Corrige as linhas quebradas em um arquivo CSV e adiciona aspas aos campos.
 
-with open(input_file, mode='r', encoding='utf-8') as infile, \
-     open(output_file, mode='w', newline='', encoding='utf-8') as outfile:
+    Args:
+        input_file (str): O caminho para o arquivo CSV de entrada.
+        output_file (str): O caminho para o arquivo CSV de saída corrigido.
+    """
+    with open(input_file, 'r', encoding='utf-8') as infile, \
+            open(output_file, 'w', newline='', encoding='utf-8') as outfile:
+        reader = csv.reader(infile)
+        writer = csv.writer(outfile, quoting=csv.QUOTE_ALL) # Adiciona aspas a todos os campos
+        header = next(reader)  # Lê o cabeçalho
+        writer.writerow(header)
 
-    reader = csv.reader(infile)
-    writer = csv.writer(outfile, quoting=csv.QUOTE_ALL)
+        linha_acumulada = []
+        num_colunas_esperado = len(header)
 
-    header = next(reader)
-    writer.writerow(["app_id", "name", "release_date", "is_free", "type"])
+        for row in reader:
+            linha_acumulada.extend(row)
+            if len(linha_acumulada) == num_colunas_esperado:
+                writer.writerow(linha_acumulada)
+                linha_acumulada = []
+            elif len(linha_acumulada) > num_colunas_esperado:
+                print(f"Aviso: Linha com mais colunas que o esperado. Ignorando o excesso: {linha_acumulada}")
+                writer.writerow(linha_acumulada[:num_colunas_esperado])
+                linha_acumulada = []
 
-    for row in reader:
-        try:
-            # Garante que a linha tem pelo menos 5 colunas
-            if len(row) < 5:
-                continue
-            # Pega os 4 primeiros campos + o último (type)
-            new_row = [row[0], row[1], row[2], row[3], row[-1]]
-            writer.writerow(new_row)
-        except Exception as e:
-            print(f"Erro ao processar linha: {row}\n{e}")
-            continue
+        # Se sobrar algo na linha_acumulada no final do arquivo
+        if linha_acumulada:
+            print(f"Aviso: Fim do arquivo com linha incompleta: {linha_acumulada}")
+            writer.writerow(linha_acumulada)
 
-print(f"Arquivo salvo como {output_file}")
+if __name__ == "__main__":
+    arquivo_entrada = 'DataCSV/reviews.csv'  # Substitua pelo nome do seu arquivo de entrada
+    arquivo_saida = 'review_corrigido.csv'  # Nome do arquivo de saída corrigido
+    corrigir_csv_v2(arquivo_entrada, arquivo_saida)
+    print(f"Arquivo corrigido '{arquivo_saida}' gerado com sucesso.")
 '''
