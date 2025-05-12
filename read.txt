@@ -1,11 +1,11 @@
 --Poetry shell
 --poetry add *biblioteca*
+--poetry remove *biblioteca*
 --poetry install
 
 --poetry lock  (atualizar dependências)
 
---poetry run jumpyter lab
-
+--poetry run jupyter lab
 
 
 -app_id
@@ -34,3 +34,65 @@
         |summary
         |extensive
         |about
+
+name: Explore os nomes dos jogos. Há algum padrão interessante? Jogos gratuitos tendem a ter nomes diferentes?
+release_date: Converta para o tipo datetime do Pandas e explore a distribuição de lançamentos ao longo do tempo. Há picos em certos anos ou meses? Jogos gratuitos têm datas de lançamento diferentes?
+is_free: Analise a proporção de jogos gratuitos e pagos. Compare outras variáveis entre esses dois grupos.
+type: Verifique os tipos de conteúdo (jogo, DLC, etc.) e sua distribuição.
+developer, publisher: Identifique os desenvolvedores e publishers mais frequentes. Jogos de desenvolvedores/publishers específicos tendem a ter avaliações melhores?
+languages: Conte o número de idiomas suportados por jogo. Há alguma relação entre o número de idiomas e as avaliações?
+genres: Explore os gêneros mais comuns. Jogos de certos gêneros tendem a ter avaliações melhores ou serem mais populares (mais recomendações)?
+review_score, review_score_description: Analise a distribuição das notas e descrições das avaliações.
+positive, negative, total: Explore essas contagens. Você pode criar uma variável de proporção de avaliações positivas (positive / total).
+metacritic_score: Analise a distribuição das notas do Metacritic (se disponível). Compare com as avaliações dos usuários da Steam.
+recommendations: Explore a distribuição do número de recomendações. Quais fatores parecem influenciar o número de recomendações?
+category: Analise as categorias de jogos mais frequentes. Há categorias associadas a melhores avaliações ou mais recomendações?
+
+
+is_free vs. review_score / recommendations: Jogos gratuitos tendem a ter avaliações diferentes dos pagos?
+release_date vs. review_score / recommendations: Jogos mais recentes tendem a ter avaliações diferentes?
+genres vs. review_score / recommendations: Certos gêneros têm avaliações ou recomendações mais altas?
+languages vs. review_score / recommendations: O número de idiomas suportados influencia as avaliações?
+metacritic_score vs. review_score: Há uma correlação entre a nota do Metacritic e a avaliação dos usuários da Steam?
+positive / total vs. recommendations: A proporção de avaliações positivas se relaciona com o número de recomendações?
+developer / publisher vs. review_score / recommendations: Desenvolvedores ou publishers específicos tendem a ter jogos com melhores avaliações?
+Visualização: Utilize gráficos para ilustrar suas descobertas:
+
+Histogramas para distribuições de review_score, metacritic_score, recommendations, número de idiomas, etc.
+
+Gráficos de barras para contagem de jogos por genre, developer, publisher, category, is_free, type, etc.
+
+Boxplots para comparar review_score ou recommendations entre diferentes grupos (e.g., jogos gratuitos vs. pagos, diferentes gêneros).
+
+Gráficos de dispersão para visualizar a relação entre metacritic_score e review_score, ou entre positive e recommendations.
+
+Gráficos de linha para visualizar a tendência de lançamentos ao longo do tempo.
+
+
+# Previsão de Avaliação:
+
+Objetivo: Prever a nota de avaliação (review_score ou talvez uma métrica derivada de positive e negative) de um jogo com base em suas características (gênero, número de idiomas, se é gratuito, etc.).
+Tipo de problema: Regressão.
+Variável alvo: review_score (numérica) ou talvez a proporção de avaliações positivas.
+Variáveis preditoras (features): is_free, número de idiomas (extraído de languages), gêneros (tratados com one-hot encoding), categorias (tratadas com one-hot encoding), ano de lançamento (extraído de release_date).
+Modelos possíveis: Regressão Linear, Árvores de Decisão (para regressão), Random Forest (para regressão), Gradient Boosting, Redes Neurais.
+Previsão de Popularidade (Recomendações):
+
+Objetivo: Prever o número de recomendações (recommendations) que um jogo receberá com base em suas características.
+Tipo de problema: Regressão.
+Variável alvo: recommendations (numérica).
+Variáveis preditoras (features): As mesmas mencionadas acima, além de talvez a nota do Metacritic (metacritic_score).
+Modelos possíveis: Semelhantes aos da previsão de avaliação.
+Classificação de Jogos Populares/Não Populares:
+
+Objetivo: Classificar um jogo como "popular" ou "não popular" com base em um limiar de recomendações (você precisará definir esse limiar).
+Tipo de problema: Classificação binária.
+Variável alvo: Uma nova variável binária (ex: is_popular, sendo 1 se recommendations > limiar, e 0 caso contrário).
+Variáveis preditoras (features): As mesmas mencionadas acima.
+Modelos possíveis: Regressão Logística, Árvores de Decisão (para classificação), Random Forest (para classificação), Support Vector Machines (SVM), Naive Bayes.
+Agrupamento de Jogos (Clustering):
+
+Objetivo: Agrupar jogos semelhantes com base em suas características (gêneros, categorias, avaliações, etc.) para identificar nichos ou padrões.
+Tipo de problema: Clustering (aprendizado não supervisionado).
+Variáveis para clustering: Variáveis numéricas (após tratamento) como número de idiomas, nota do Metacritic, proporção de avaliações positivas, e representações numéricas de variáveis categóricas (após one-hot encoding dos gêneros e categorias).
+Modelos possíveis: K-Means, DBSCAN, Aglomeração Hierárquica.

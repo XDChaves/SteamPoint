@@ -9,11 +9,11 @@ CORS(app)
 
 @app.route('/')
 def hello_world():
-    dgames = pd.read_csv('.\\DataCSV\\games_limpo.csv', sep=',',on_bad_lines="skip")
+    games = pd.read_csv('DataCSV/games_limpo.csv', sep=',')
+    dg_filter = games[["app_id","name","release_date","is_free","type"]]
 
-    json_table_str = dgames.to_json(orient='table', indent=4, force_ascii=False)
+    json_table_str = dg_filter.to_json(orient='table', indent=4, force_ascii=False)
 
-    
     return json_table_str
 
 
