@@ -5,13 +5,14 @@ import pandas as pd
 app = Flask(__name__)
 CORS(app)
 
-# Caminhos para os arquivos CSV
+
 games_csv = 'DataCSV/games.csv'
 steamspy_csv = 'DataCSV/steamspy_insights.csv'
 reviews_csv = 'DataCSV/review.csv'
 promotional_csv = 'DataCSV/promotional.csv'
 categories_csv = 'DataCSV/categories.csv'
 tags_csv = 'DataCSV/tags.csv'
+
 
 @app.route('/steam-games')
 def steam_games():
@@ -65,20 +66,6 @@ def get_game_details(app_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/categories')
-def steam_categories():
-    games= pd.read_csv(games_csv, sep=',')
-    dg_filter = games[["app_id", "name"]]
-
-    dcat = pd.read_csv('DataCSV/categories.csv', sep=',')
-    filtered = dcat[["app_id","category"]]
-
-    df = pd.merge(dg_filter, filtered, on='app_id', how='inner')
-
-    json_data_cat = df.to_json(orient='table', indent=3, force_ascii=False)
-
-    return json_data_cat
-
 @app.route('/steam-games-insights')
 def games_insights():
     games= pd.read_csv(games_csv, sep=',')
@@ -93,22 +80,34 @@ def games_insights():
 
     return json_data_insights
 
+@app.route('/categories')
+def steam_categories():
+    games= pd.read_csv(games_csv, sep=',')
+    dg_filter = games[["app_id", "name"]]
+
+    dcat = pd.read_csv('DataCSV/categories.csv', sep=',')
+    filtered = dcat[["app_id","category"]]
+
+    df = pd.merge(dg_filter, filtered, on='app_id', how='inner')
+
+    json_data_cat = df.to_json(orient='table', indent=3, force_ascii=False)
+
+    return json_data_cat
+
+@app.route('/tags')
+def steam_tags():
+    games= pd.read_csv(games_csv, sep=',')
+    dg_filter = games[["app_id", "name"]]
+
+    dtag = pd.read_csv('DataCSV/tags.csv', sep=',')
+    filtered = dtag[["app_id","tag"]]
+
+    df = pd.merge(dg_filter, filtered, on='app_id', how='inner')
+
+    json_data_tag = df.to_json(orient='table', indent=3, force_ascii=False)
+
+    return json_data_tag
+
+
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-'''
-@app.route('/categories')
-def categories():
-    sgames_df = sgames()
-
-    categories = pd.read_csv('DataCSV/categories.csv', sep=',')
-    # tags = pd.read_csv('DataCSV/tags.csv', sep=',')
-
-    df = pd.merge(sgames_df,categories, on='app_id', how='inner')
-    # df = pd.merge(df,tags, on='app_id', how='inner')
-
-    json_table_categories = df.to_json(orient='table', indent=4, force_ascii=False)
-
-    return json_table_categories
-'''
