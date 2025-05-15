@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import pandas as pd
-import math
 
 app = Flask(__name__)
 CORS(app)
@@ -98,12 +97,12 @@ def steam_reviews():
     games= pd.read_csv(games_csv, sep=',')
     dg_filter = games[["app_id", "name"]]
 
-    drev = pd.read_csv('DataCSV/review.csv', sep=',')
+    drev = pd.read_csv('DataCSV/review.csv', sep=',', low_memory=False)
     filtered = drev[["app_id","review_score","review_score_description","positive","negative","total","metacritic_score","recommendations"]]
 
     df = pd.merge(dg_filter, filtered, on='app_id', how='inner')
 
-    json_data_tag = df.to_json(orient='table', indent=3, force_ascii=False)
+    json_data_tag = df.to_json(orient='table', indent=9, force_ascii=False)
 
     return json_data_tag
 
