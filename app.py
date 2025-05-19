@@ -102,9 +102,9 @@ def steam_reviews():
 
     df = pd.merge(dg_filter, filtered, on='app_id', how='inner')
 
-    json_data_tag = df.to_json(orient='table', indent=9, force_ascii=False)
+    json_data_rev = df.to_json(orient='table', indent=9, force_ascii=False)
 
-    return json_data_tag
+    return json_data_rev
 
 @app.route('/tags')
 def steam_tags():
