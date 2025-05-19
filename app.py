@@ -120,6 +120,27 @@ def steam_tags():
 
     return json_data_tag
 
+#Fazendo merge com Reviews
+
+@app.route('/rev-insights')
+def rev_insights():
+
+    games= pd.read_csv(games_csv, sep=',')
+    dg_filter = games[["app_id", "name"]]
+
+    drev = pd.read_csv('DataCSV/review.csv', sep=',', low_memory=False)
+    teste=drev[["app_id","review_score"]]
+
+    dx = pd.merge(dg_filter, teste, on='app_id', how='inner')
+
+    dspy = pd.read_csv('DataCSV/steamspy_insights.csv', sep=',')
+    filter = dspy[["app_id","genres"]]
+
+    df = pd.merge(dx, filter, on='app_id', how='inner')
+
+    json_data_teste = df.to_json(orient='table', indent=3, force_ascii=False)
+
+    return json_data_teste
 
 if __name__ == '__main__':
     app.run(debug=True)

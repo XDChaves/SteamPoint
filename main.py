@@ -1,35 +1,6 @@
 '''
 import pandas as pd
 
-games = pd.read_csv('DataCSV/games.csv', sep=',')
-dg_filter = games[["app_id","name","release_date","is_free","type"]]
-
-dspy = pd.read_csv('DataCSV/steamspy_insights.csv', sep=',')
-ds_filter = dspy[["app_id","developer","publisher","languages","genres"]]
-
-reviews = pd.read_csv('DataCSV/review.csv', sep=',')
-dr_filter = reviews[["app_id","review_score","review_score_description","positive","negative","total","metacritic_score","recommendations"]]
-
-npromotional = pd.read_csv('DataCSV/promotional.csv', sep=',')
-categories = pd.read_csv('DataCSV/categories.csv', sep=',')
-tags = pd.read_csv('DataCSV/tags.csv', sep=',')
-dt_filter = games[["app_id","tag"]]
-
-
-df = pd.merge(dg_filter, ds_filter, on='app_id', how='inner')
-df = pd.merge(df, dr_filter, on='app_id', how='inner')
-df = pd.merge(df, npromotional, on='app_id', how='inner')
-df = pd.merge(df, categories, on='app_id', how='inner')
-df = pd.merge(df, tags, on='app_id', how='inner')
-
-# Salvar o DataFrame em um novo arquivo CSV
-df.to_csv('games_merged.csv', index=False, encoding='utf-8')
-print("Arquivo CSV 'games_merged.csv' criado com sucesso!")
-'''
-
-'''
-import pandas as pd
-
 # Função para realizar o inner join, salvar em CSV e contar removidos
 def process_and_save(df1, df2, df1_name, df2_name, on='app_id'):
     """
@@ -63,7 +34,6 @@ def process_and_save(df1, df2, df1_name, df2_name, on='app_id'):
 
 
 # Carregar os dados dos arquivos CSV
-# Usei os nomes dos seus arquivos
 categories_df = pd.read_csv('DataCSV/categories.csv', sep=',')
 games_limpo_df = pd.read_csv('DataCSV/games_limpo.csv', sep=',')
 newpromotional_df = pd.read_csv('DataCSV/newpromotional.csv', sep=',')
@@ -169,13 +139,13 @@ process_and_save(tags_merged, 'tags_merged')
 '''
 
 '''
-import pandas as pd
+import pandas as pd - Usando games_merged_final(contém todos os dados em 1 csv) para criar o csv Promotional
 
 # Carrega o arquivo CSV que contém todos os dados
 games_merged_final_df = pd.read_csv('DataCSV/games_merged_final.csv', sep=',')
 
 # Carrega o arquivo CSV promocional, que contém apenas a coluna 'app_id'
-promotional_df = pd.read_csv('DataCSV/promotional.csv', sep=',')  # Certifique-se de que o caminho está correto
+promotional_df = pd.read_csv('DataCSV/promotional.csv', sep=',')
 
 # Garante que temos apenas um 'header_image' e 'background_image' por 'app_id'
 promotional_data_from_merged = games_merged_final_df[['app_id', 'header_image', 'background_image']].drop_duplicates()

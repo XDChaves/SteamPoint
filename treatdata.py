@@ -40,7 +40,7 @@ with open(entrada_csv, 'r', encoding='utf-8') as entrada, \
         linha_limpa = regex_chaves.sub('{}', linha)  # Substitui conteúdo das chaves por {}
         saida.write(linha_limpa)
 
-print("Pronto! Novo CSV criado com conteúdo das chaves limpo.")
+print("CSV criado com conteúdo das chaves limpo.")
 '''
 
 '''
@@ -82,8 +82,8 @@ def corrigir_csv_v2(input_file, output_file):
             writer.writerow(linha_acumulada)
 
 if __name__ == "__main__":
-    arquivo_entrada = 'DataCSV/reviews.csv'  # Substitua pelo nome do seu arquivo de entrada
-    arquivo_saida = 'review_corrigido.csv'  # Nome do arquivo de saída corrigido
+    arquivo_entrada = 'DataCSV/reviews.csv'
+    arquivo_saida = 'review_corrigido.csv'
     corrigir_csv_v2(arquivo_entrada, arquivo_saida)
     print(f"Arquivo corrigido '{arquivo_saida}' gerado com sucesso.")
 '''

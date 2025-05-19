@@ -51,8 +51,8 @@ category: Analise as categorias de jogos mais frequentes. Há categorias associa
 
 is_free vs. review_score / recommendations: Jogos gratuitos tendem a ter avaliações diferentes dos pagos?
 release_date vs. review_score / recommendations: Jogos mais recentes tendem a ter avaliações diferentes?
-genres vs. review_score / recommendations: Certos gêneros têm avaliações ou recomendações mais altas?
-languages vs. review_score / recommendations: O número de idiomas suportados influencia as avaliações?
+genres vs. review_score / recommendations: Certo
+s gêneros têm avaliações ou recomendações mais altas?languages vs. review_score / recommendations: O número de idiomas suportados influencia as avaliações?
 metacritic_score vs. review_score: Há uma correlação entre a nota do Metacritic e a avaliação dos usuários da Steam?
 positive / total vs. recommendations: A proporção de avaliações positivas se relaciona com o número de recomendações?
 developer / publisher vs. review_score / recommendations: Desenvolvedores ou publishers específicos tendem a ter jogos com melhores avaliações?
