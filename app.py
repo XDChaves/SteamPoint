@@ -1,9 +1,18 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import pandas as pd
+import time
+from steam_scraper import get_top_games_steam_stats
 
 app = Flask(__name__)
 CORS(app)
+
+# Variáveis para o cache
+cached_top_games = None
+last_fetch_time = 0
+# Duração do cache: 30 minutos a 1 hora (em segundos)
+CACHE_DURATION_SECONDS = 30 * 60 # 30 minutos
+# CACHE_DURATION_SECONDS = 60 * 60 # 1 hora
 
 tags_csv = 'DataCSV/tags.csv'
 games_csv = 'DataCSV/games.csv'
@@ -11,6 +20,37 @@ steamspy_csv = 'DataCSV/steamspy_insights.csv'
 reviews_csv = 'DataCSV/review.csv'
 categories_csv = 'DataCSV/categories.csv'
 promotional_csv = 'DataCSV/promotional.csv'
+
+# Rota para obter os top 10 jogos da Steam
+@app.route('/api/top-games', methods=['GET'])
+def top_games():
+    global cached_top_games, last_fetch_time # Declara para poder modificar as variáveis globais
+
+    current_time = time.time()
+
+    # Verifica se o cache está vazio ou se expirou
+    if cached_top_games is None or (current_time - last_fetch_time > CACHE_DURATION_SECONDS):
+        print("Cache expirado ou vazio. Buscando novos dados da Steam...")
+        try:
+            fresh_data = get_top_games_steam_stats() # Chama a função de scraping
+            if fresh_data: # Se os dados foram obtidos com sucesso
+                cached_top_games = fresh_data
+                last_fetch_time = current_time
+                print("Dados atualizados e armazenados em cache.")
+            else:
+                # Se o scraping não retornou dados mas não levantou exceção
+                print("Scraping não retornou dados, mantendo o cache antigo se existir.")
+                if cached_top_games is None: # Se não há dados antigos, retorna erro
+                    return jsonify({"error": "Não foi possível obter dados dos jogos no momento."}), 500
+        except Exception as e:
+            print(f"Erro inesperado ao buscar dados via scraping: {e}")
+            if cached_top_games is None: # Se não há dados antigos e houve erro
+                return jsonify({"error": "Não foi possível obter dados dos jogos no momento."}), 500
+    else:
+        print("Retornando dados do cache (válido).")
+
+    return jsonify(cached_top_games)
+
 
 @app.route('/steam-games')
 def steam_games():
@@ -121,7 +161,6 @@ def steam_tags():
     return json_data_tag
 
 #Fazendo merge com Reviews
-
 @app.route('/rev-insights')
 def rev_insights():
 
