@@ -15,10 +15,16 @@ CACHE_DURATION_SECONDS = 30 * 60 # 30 minutos
 # CACHE_DURATION_SECONDS = 60 * 60 # 1 hora
 
 tags_csv = 'DataCSV/tags.csv'
+
 games_csv = 'DataCSV/games.csv'
+
 steamspy_csv = 'DataCSV/steamspy_insights.csv'
+
 reviews_csv = 'DataCSV/review.csv'
+
 categories_csv = 'DataCSV/categories.csv'
+["app_id","category"]
+
 promotional_csv = 'DataCSV/promotional.csv'
 
 # Rota para obter os top 10 jogos da Steam
@@ -50,7 +56,6 @@ def top_games():
         print("Retornando dados do cache (válido).")
 
     return jsonify(cached_top_games)
-
 
 @app.route('/steam-games')
 def steam_games():
@@ -161,25 +166,13 @@ def steam_tags():
     return json_data_tag
 
 #Fazendo merge com Reviews
-@app.route('/rev-insights')
-def rev_insights():
+@app.route('/rev-all')
+def rev_all():
+    rev = pd.read_csv('DataCSV/all_data_combined_filtered.csv', sep=',', low_memory=False)
 
-    games= pd.read_csv(games_csv, sep=',')
-    dg_filter = games[["app_id", "name"]]
+    json_data_all = rev.to_json(orient='table', indent=3, force_ascii=False)
 
-    drev = pd.read_csv('DataCSV/review.csv', sep=',', low_memory=False)
-    teste=drev[["app_id","review_score"]]
-
-    dx = pd.merge(dg_filter, teste, on='app_id', how='inner')
-
-    dspy = pd.read_csv('DataCSV/steamspy_insights.csv', sep=',')
-    filter = dspy[["app_id","genres"]]
-
-    df = pd.merge(dx, filter, on='app_id', how='inner')
-
-    json_data_teste = df.to_json(orient='table', indent=3, force_ascii=False)
-
-    return json_data_teste
+    return json_data_all
 
 if __name__ == '__main__':
     app.run(debug=True)
